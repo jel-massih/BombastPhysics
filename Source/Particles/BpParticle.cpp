@@ -37,3 +37,49 @@ void BpParticle::AddForce(const BpVec3& force)
 {
 	m_accumulatedForce += force;
 }
+
+BpVec3 bPhysics::BpParticle::GetPosition()
+{
+	return m_position;
+}
+
+void bPhysics::BpParticle::SetPosition(float x, float y, float z)
+{
+	m_position.x = x;
+	m_position.y = y;
+	m_position.z = z;
+}
+
+BpVec3 bPhysics::BpParticle::GetVelocity()
+{
+	return m_velocity;
+}
+
+void bPhysics::BpParticle::SetVelocity(float x, float y, float z)
+{
+	m_velocity.x = x;
+	m_velocity.y = y;
+	m_velocity.z = z;
+}
+
+BpVec3 bPhysics::BpParticle::GetAcceleration()
+{
+	return m_acceleration;
+}
+
+void bPhysics::BpParticle::SetAcceleration(float x, float y, float z)
+{
+	m_acceleration.x = x;
+	m_acceleration.y = y;
+	m_acceleration.z = z;
+}
+
+void bPhysics::BpParticle::SetDamping(float damping)
+{
+	m_damping = daping;
+}
+
+void bPhysics::BpParticle::ClearAccumulator()
+{
+	m_accumulatedForce.Zero();
+}
