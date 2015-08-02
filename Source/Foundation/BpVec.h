@@ -79,6 +79,9 @@ namespace bPhysics
 		inline BpVec3 operator+(BpVec3 v) const;
 		inline BpVec3& operator+=(const BpVec3& v);
 
+		inline BpVec3 operator-(BpVec3 v) const;
+		inline BpVec3& operator-=(const BpVec3& v);
+
 		inline bool IsFinite() const {
 			return BpIsFinite(x) && BpIsFinite(y) && BpIsFinite(z);
 		}
@@ -125,6 +128,20 @@ namespace bPhysics
 		x += v.x;
 		y += v.y;
 		z += v.z;
+
+		return *this;
+	}
+
+	inline BpVec3 BpVec3::operator-(BpVec3 v) const
+	{
+		return BpVec3(x - v.x, y - v.y, z - v.z);
+	}
+
+	inline BpVec3& BpVec3::operator-=(const BpVec3& v)
+	{
+		x -= v.x;
+		y -= v.y;
+		z -= v.z;
 
 		return *this;
 	}
