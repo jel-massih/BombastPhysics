@@ -90,6 +90,12 @@ namespace bPhysics
 
 		inline void Zero() { x = y = z = 0; }
 
+		float Dot(const BpVec3& point) const
+		{
+			return x * point.x + y * point.y + z * point.z;
+		}
+
+
 	public:
 		f32 x, y, z;
 	};
