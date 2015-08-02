@@ -13,14 +13,12 @@
 						} \
 			} while (0) \
 
-#define BP_ASSERTf(expr, message, ...) \
+#define BP_ASSERTf(expr, ...) \
 	do { \
 		if (!(expr)) \
 		{ \
 			char formattedMsg[1024]; \
-			va_list args; \
-			va_start(args, message); \
-			vsprintf_s(formattedMsg, sizeof(formattedMsg), message, args); \
+			sprintf_s(formattedMsg, sizeof(formattedMsg), __VA_ARGS__); \
 			assert(expr && formattedMsg); \
 		} \
 	} while (0) 
