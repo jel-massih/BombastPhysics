@@ -26,6 +26,7 @@
 #include "Geometry\BpGeometryCapsule.h"
 #include "Geometry\BpBounds3.h"
 #include "Geometry\BpShape.h"
+#include "Geometry\BpPlane.h"
 
 //Actors
 #include "Actors\BpActor.h"
