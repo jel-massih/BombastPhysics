@@ -32,6 +32,8 @@ namespace bPhysics
 		};
 
 	public:
+		BpParticle() : m_damping(0.001f) { SetMass(1.0f); }
+
 		void SetMass(f32 mass);
 		void SetInverseMass(f32 inverseMass);
 
