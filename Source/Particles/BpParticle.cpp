@@ -18,11 +18,11 @@ void BpParticle::SetInverseMass(f32 inverseMass)
 	m_currentState.Recalculate();
 }
 
-void BpParticle::Simulate(f32 currentTime, f32 timestep)
+void BpParticle::Simulate(f32 timestep)
 {
 	assert(timestep > 0);
 
-	Integrate(m_currentState, currentTime, timestep);
+	Integrate(m_currentState, timestep);
 
 	//zero accumulated force
 	m_accumulatedForce.Zero();
@@ -81,12 +81,12 @@ void BpParticle::ClearAccumulator()
 	m_accumulatedForce.Zero();
 }
 
-void BpParticle::Integrate(IntegrationState& initialState, float t, float dt)
+void BpParticle::Integrate(IntegrationState& initialState, float dt)
 {
-	IntegrationDerivative a = Evaluate(initialState, t);
-	IntegrationDerivative b = Evaluate(initialState, t, dt * 0.5f, a);
-	IntegrationDerivative c = Evaluate(initialState, t, dt * 0.5f, b);
-	IntegrationDerivative d = Evaluate(initialState, t, dt, c);
+	IntegrationDerivative a = Evaluate(initialState, dt);
+	IntegrationDerivative b = Evaluate(initialState, dt * 0.5f, a);
+	IntegrationDerivative c = Evaluate(initialState, dt * 0.5f, b);
+	IntegrationDerivative d = Evaluate(initialState, dt, c);
 
 	initialState.position += 1.0f / 6.0f * (a.velocity + 2.0f*(b.velocity + c.velocity) + d.velocity) * dt;
 	initialState.momentum += 1.0f / 6.0f * (a.force + 2.0f*(b.force + c.force) + d.force) * dt;
@@ -94,7 +94,7 @@ void BpParticle::Integrate(IntegrationState& initialState, float t, float dt)
 	initialState.Recalculate();
 }
 
-BpParticle::IntegrationDerivative BpParticle::Evaluate(const IntegrationState& state, float t)
+BpParticle::IntegrationDerivative BpParticle::Evaluate(const IntegrationState& state, float dt)
 {
 	IntegrationDerivative output;
 	output.velocity = state.velocity;
@@ -103,7 +103,7 @@ BpParticle::IntegrationDerivative BpParticle::Evaluate(const IntegrationState& s
 	return output;
 }
 
-BpParticle::IntegrationDerivative BpParticle::Evaluate(IntegrationState state, float t, float dt, const IntegrationDerivative& derivative)
+BpParticle::IntegrationDerivative BpParticle::Evaluate(IntegrationState state, float dt, const IntegrationDerivative& derivative)
 {
 	state.position += derivative.velocity * dt;
 	state.momentum +=  derivative.force * dt;
@@ -128,4 +128,9 @@ void BpParticle::Forces(const IntegrationState& state, BpVec3& force)
 
 	//Apply forces
 	force += m_accumulatedForce;
+}
+
+const BpParticle::IntegrationState& BpParticle::GetState() const
+{
+	return m_currentState;
 }

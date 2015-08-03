@@ -168,6 +168,7 @@
     <ClInclude Include="..\Geometry\BpGeometryBox.h" />
     <ClInclude Include="..\Geometry\BpGeometryCapsule.h" />
     <ClInclude Include="..\Geometry\BpGeometrySphere.h" />
+    <ClInclude Include="..\Geometry\BpPlane.h" />
     <ClInclude Include="..\Geometry\BpShape.h" />
     <ClInclude Include="..\Particles\BpParticle.h" />
     <ClInclude Include="..\Scene\BpScene.h" />
