@@ -81,12 +81,12 @@ void BpParticle::ClearAccumulator()
 	m_accumulatedForce.Zero();
 }
 
-void BpParticle::Integrate(IntegrationState& initialState, float dt)
+void BpParticle::Integrate(const std::vector<BpPlane>& planes, IntegrationState& initialState, float dt)
 {
-	IntegrationDerivative a = Evaluate(initialState, dt);
-	IntegrationDerivative b = Evaluate(initialState, dt * 0.5f, a);
-	IntegrationDerivative c = Evaluate(initialState, dt * 0.5f, b);
-	IntegrationDerivative d = Evaluate(initialState, dt, c);
+	IntegrationDerivative a = Evaluate(planes, initialState, dt);
+	IntegrationDerivative b = Evaluate(planes, initialState, dt * 0.5f, a);
+	IntegrationDerivative c = Evaluate(planes, initialState, dt * 0.5f, b);
+	IntegrationDerivative d = Evaluate(planes, initialState, dt, c);
 
 	initialState.position += 1.0f / 6.0f * (a.velocity + 2.0f*(b.velocity + c.velocity) + d.velocity) * dt;
 	initialState.momentum += 1.0f / 6.0f * (a.force + 2.0f*(b.force + c.force) + d.force) * dt;
@@ -94,16 +94,16 @@ void BpParticle::Integrate(IntegrationState& initialState, float dt)
 	initialState.Recalculate();
 }
 
-BpParticle::IntegrationDerivative BpParticle::Evaluate(const IntegrationState& state, float dt)
+BpParticle::IntegrationDerivative BpParticle::Evaluate(const std::vector<BpPlane>& planes, const IntegrationState& state, float dt)
 {
 	IntegrationDerivative output;
 	output.velocity = state.velocity;
-	Forces(state, output.force);
+	Forces(planes, state, output.force);
 
 	return output;
 }
 
-BpParticle::IntegrationDerivative BpParticle::Evaluate(IntegrationState state, float dt, const IntegrationDerivative& derivative)
+BpParticle::IntegrationDerivative BpParticle::Evaluate(const std::vector<BpPlane>& planes, IntegrationState state, float dt, const IntegrationDerivative& derivative)
 {
 	state.position += derivative.velocity * dt;
 	state.momentum +=  derivative.force * dt;
@@ -111,12 +111,12 @@ BpParticle::IntegrationDerivative BpParticle::Evaluate(IntegrationState state, f
 
 	IntegrationDerivative output;
 	output.velocity = state.velocity;
-	Forces(state, output.force);
+	Forces(planes, state, output.force);
 
 	return output;
 }
 
-void BpParticle::Forces(const IntegrationState& state, BpVec3& force)
+void BpParticle::Forces(const std::vector<BpPlane>& planes, const IntegrationState& state, BpVec3& force)
 {
 	force.Zero();
 
@@ -126,8 +126,78 @@ void BpParticle::Forces(const IntegrationState& state, BpVec3& force)
 	//Apply Damping
 	force -= m_damping * state.velocity;
 
+	//Apply Collision
+	Collision(planes, state, force);
+
 	//Apply forces
 	force += m_accumulatedForce;
+}
+
+void bPhysics::BpParticle::Collision(const std::vector<BpPlane>& planes, const IntegrationState & state, BpVec3 & force)
+{
+	BpVec3 a = state.bodyToWorld * (BpVec3(-1, -1, -1) * state.size * 0.5);
+	BpVec3 b = state.bodyToWorld * (BpVec3(+1, -1, -1) * state.size * 0.5);
+	BpVec3 c = state.bodyToWorld * (BpVec3(+1, +1, -1) * state.size * 0.5);
+	BpVec3 d = state.bodyToWorld * (BpVec3(-1, +1, -1) * state.size * 0.5);
+	BpVec3 e = state.bodyToWorld * (BpVec3(-1, -1, +1) * state.size * 0.5);
+	BpVec3 f = state.bodyToWorld * (BpVec3(+1, -1, +1) * state.size * 0.5);
+	BpVec3 g = state.bodyToWorld * (BpVec3(+1, +1, +1) * state.size * 0.5);
+	BpVec3 h = state.bodyToWorld * (BpVec3(-1, +1, +1) * state.size * 0.5);
+
+	for (unsigned int i = 0; i < planes.size(); i++)
+	{
+		CollisionForPoint(state, force, a, planes[i]);
+		collisionForPoint(state, force, b, planes[i]);
+		collisionForPoint(state, force, c, planes[i]);
+		collisionForPoint(state, force, d, planes[i]);
+		collisionForPoint(state, force, e, planes[i]);
+		collisionForPoint(state, force, f, planes[i]);
+		collisionForPoint(state, force, g, planes[i]);
+		collisionForPoint(state, force, h, planes[i]);
+	}
+}
+
+void BpParticle::CollisionForPoint(const IntegrationState &state, BpVec3 &force, const BpVec3 &point, const BpPlane &plane)
+{
+	const float c = 10;
+	const float k = 100;
+	const float b = 5;
+	const float f = 3;
+
+	const float penetration = plane.constant - point.dot(plane.normal);
+
+	if (penetration > 0)
+	{
+		Vector velocity = state.velocity.cross(point - state.position) + state.velocity;
+		assert(velocity == velocity);
+
+		const float relativeSpeed = -plane.normal.dot(velocity);
+		assert(relativeSpeed == relativeSpeed);
+
+		if (relativeSpeed > 0)
+		{
+			Vector collisionForce = plane.normal * (relativeSpeed * c);
+			assert(collisionForce == collisionForce);
+			force += collisionForce;
+			torque += (point - state.position).cross(collisionForce);
+		}
+
+		Vector tangentialVelocity = velocity + (plane.normal * relativeSpeed);
+		Vector frictionForce = -tangentialVelocity * f;
+		assert(frictionForce == frictionForce);
+		force += frictionForce;
+		torque += (point - state.position).cross(frictionForce);
+
+		Vector penaltyForce = plane.normal * (penetration * k);
+		assert(penaltyForce == penaltyForce);
+		force += penaltyForce;
+		torque += (point - state.position).cross(penaltyForce);
+
+		Vector dampingForce = plane.normal * (relativeSpeed * penetration * b);
+		assert(dampingForce == dampingForce);
+		force += dampingForce;
+		torque += (point - state.position).cross(dampingForce);
+	}
 }
 
 const BpParticle::IntegrationState& BpParticle::GetState() const

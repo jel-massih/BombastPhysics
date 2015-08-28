@@ -1,6 +1,9 @@
 #pragma once
 
 #include "../Foundation/BpVec.h"
+#include "../Foundation/BpMat.h"
+#include <vector>
+#include "../Geometry/BpPlane.h"
 
 namespace bPhysics
 {
@@ -23,17 +26,24 @@ namespace bPhysics
 			//Secondary State
 			BpVec3 velocity; //Calculated from momentum
 
+			BpMat4x4 bodyToWorld;
+
+			float size;                    
 			float mass;
 			float inverseMass;
 
 			void Recalculate()
 			{
 				velocity = momentum * inverseMass;
+
+				BpMat4x4 translation;
+				translation.BuildTranslation(position);
+				bodyToWorld = translation;
 			}
 		};
 
 	public:
-		BpParticle() : m_damping(0.001f) { SetMass(1.0f); }
+		BpParticle() : m_damping(0.001f) { SetMass(1.0f); m_currentState.size = 1; }
 
 		void SetMass(f32 mass);
 		void SetInverseMass(f32 inverseMass);
@@ -55,15 +65,20 @@ namespace bPhysics
 
 		void ClearAccumulator();
 
+		void CollisionForPoint(const IntegrationState & state, BpVec3 & force, const BpVec3 & point, const BpPlane & plane);
+
 		const IntegrationState& GetState() const;
 
 	private:
-		void Integrate(IntegrationState& initialState, float dt);
+		void Integrate(const std::vector<BpPlane>& planes, IntegrationState& initialState, float dt);
 
-		IntegrationDerivative Evaluate(const IntegrationState& state, float dt);
-		IntegrationDerivative Evaluate(IntegrationState state, float dt, const IntegrationDerivative& derivative);
+		IntegrationDerivative Evaluate(const std::vector<BpPlane>& planes, const IntegrationState& state, float dt);
+		IntegrationDerivative Evaluate(const std::vector<BpPlane>& planes, IntegrationState state, float dt, const IntegrationDerivative& derivative);
 
-		void Forces(const IntegrationState& state, BpVec3& force);
+		void Forces(const std::vector<BpPlane>& planes, const IntegrationState& state, BpVec3& force);
+		static void Collision(const std::vector<BpPlane>& planes, const IntegrationState & state, BpVec3 & force);
+
+	private:
 		IntegrationState m_currentState;
 
 		BpVec3 m_gravity;

@@ -71,6 +71,13 @@ namespace bPhysics
 		return out;
 	}
 
+	inline BpVec3 operator * (const BpMat4x4& m, const BpVec3& v)
+	{
+		return BpVec3(v.x * m.col0.x + v.y * m.col0.y + v.z * m.col0.z + m.col0.w,
+			v.x * m.col1.x + v.y * m.col1.y + v.z * m.col1.z + m.col1.w,
+			v.x * m.col2.x + v.y * m.col2.y + v.z * m.col2.z + m.col2.w);
+	}
+
 	inline BpVec3 BpMat4x4::GetPosition() const
 	{
 		return BpVec3(col0.w, col1.w, col2.w);
