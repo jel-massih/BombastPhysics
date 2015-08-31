@@ -18,11 +18,11 @@ void BpParticle::SetInverseMass(f32 inverseMass)
 	m_currentState.Recalculate();
 }
 
-void BpParticle::Simulate(f32 timestep)
+void BpParticle::Simulate(const std::vector<BpPlane>& planes, f32 timestep)
 {
 	assert(timestep > 0);
 
-	Integrate(m_currentState, timestep);
+	Integrate(planes, m_currentState, timestep);
 
 	//zero accumulated force
 	m_accumulatedForce.Zero();

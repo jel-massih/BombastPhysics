@@ -48,7 +48,7 @@ namespace bPhysics
 		void SetMass(f32 mass);
 		void SetInverseMass(f32 inverseMass);
 
-		void Simulate(f32 timestep);
+		void Simulate(const std::vector<BpPlane>& planes, f32 timestep);
 
 		void AddForce(const BpVec3& force);
 
