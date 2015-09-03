@@ -26,13 +26,13 @@ namespace bPhysics
 
 	protected:
 		//Resolves this contact for velocity and interpenetration
-		void Resolve(f32 duration);
+		void Resolve(f32 dt);
 
 		f32 CalculateSeparatingVelocity() const;
 
 	private:
-		void ResolveVelocity(f32 duration);
-		void ResolveInterpenetration(f32 duration);
+		void ResolveVelocity(f32 dt);
+		void ResolveInterpenetration(f32 dt);
 	};
 
 	class BpParticleContactResolver
@@ -47,7 +47,7 @@ namespace bPhysics
 		void SetIterations(unsigned iterations);
 
 		//Resolve set of particle contacts for penetration and velocity
-		void ResolveContacts(BpParticleContact* contactArray, unsigned numContacts, f32 duration);
+		void ResolveContacts(BpParticleContact* contactArray, unsigned numContacts, f32 dt);
 	};
 
 	class BpParicleContactGenerator

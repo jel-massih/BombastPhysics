@@ -45,9 +45,11 @@ namespace bPhysics
 
 		BpVec3 GetPosition();
 		void SetPosition(f32 x, f32 y, f32 z);
+		void SetPosition(BpVec3 position);
 		
 		BpVec3 GetVelocity();
 		void SetVelocity(f32 x, f32 y, f32 z);
+		void SetVelocity(BpVec3 velocity);
 
 		BpVec3 GetAcceleration();
 		void SetAcceleration(f32 x, f32 y, f32 z);

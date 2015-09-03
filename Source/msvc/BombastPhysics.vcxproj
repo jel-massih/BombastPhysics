@@ -171,6 +171,7 @@
     <ClInclude Include="..\Geometry\BpPlane.h" />
     <ClInclude Include="..\Geometry\BpShape.h" />
     <ClInclude Include="..\Particles\BpParticle.h" />
+    <ClInclude Include="..\Particles\BpParticleContacts.h" />
     <ClInclude Include="..\Scene\BpScene.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
@@ -185,6 +186,7 @@
     <ClCompile Include="..\Geometry\BpGeometry.cpp" />
     <ClCompile Include="..\Geometry\BpShape.cpp" />
     <ClCompile Include="..\Particles\BpParticle.cpp" />
+    <ClCompile Include="..\Particles\BpParticleContacts.cpp" />
     <ClCompile Include="..\Scene\BpScene.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

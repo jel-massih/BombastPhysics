@@ -59,6 +59,16 @@ void BpParticle::SetVelocity(f32 x, f32 y, f32 z)
 	m_currentState.Recalculate();
 }
 
+void bPhysics::BpParticle::SetPosition(BpVec3 position)
+{
+	SetPosition(position.x, position.y, position.z);
+}
+
+void bPhysics::BpParticle::SetVelocity(BpVec3 velocity)
+{
+	SetVelocity(velocity.x, velocity.y, velocity.z);
+}
+
 BpVec3 BpParticle::GetAcceleration()
 {
 	return m_currentState.acceleration;

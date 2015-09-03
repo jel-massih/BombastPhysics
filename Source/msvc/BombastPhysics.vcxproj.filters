@@ -83,6 +83,10 @@
     <ClInclude Include="..\Foundation\BpMat.h">
       <Filter>Foundation</Filter>
     </ClInclude>
+    <ClInclude Include="..\Geometry\BpPlane.h" />
+    <ClInclude Include="..\Particles\BpParticleContacts.h">
+      <Filter>Particles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\BpPhysicsCore.cpp" />
@@ -115,6 +119,9 @@
       <Filter>Geometry</Filter>
     </ClCompile>
     <ClCompile Include="..\Particles\BpParticle.cpp">
+      <Filter>Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Particles\BpParticleContacts.cpp">
       <Filter>Particles</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,4 +1,5 @@
 #include "BpParticleContacts.h"
+#include "../Foundation/BpTypes.h"
 
 using namespace bPhysics;
 
@@ -20,7 +21,7 @@ f32 BpParticleContact::CalculateSeparatingVelocity() const
 	return relativeVelocity.Dot(contactNormal);
 }
 
-void BpParticleContact::ResolveVelocity(f32 duration)
+void BpParticleContact::ResolveVelocity(f32 dt)
 {
 	f32 separatingVelocity = CalculateSeparatingVelocity();
 
@@ -37,7 +38,7 @@ void BpParticleContact::ResolveVelocity(f32 duration)
 	{
 		accelerationCausedVelocity -= particle[1]->GetAcceleration();
 	}
-	f32 accelerationCausedSepVelocity = accelerationCausedVelocity.Dot(contactNormal) * duration;
+	f32 accelerationCausedSepVelocity = accelerationCausedVelocity.Dot(contactNormal) * dt;
 
 	//If closing velocity from acceleration buildup, remove it from separating velocity
 	if (accelerationCausedSepVelocity < 0)
@@ -60,9 +61,101 @@ void BpParticleContact::ResolveVelocity(f32 duration)
 	BpVec3 impulsePerIMass = contactNormal.Dot(impules);
 
 	particle[0]->SetVelocity(particle[0]->GetVelocity() + impulsePerIMass * particle[0]->GetState().inverseMass);
+	if (particle[1] != nullptr)
+	{
+		particle[1]->SetVelocity(particle[1]->GetVelocity() + impulsePerIMass * -particle[1]->GetState().inverseMass);
+	}
 }
 
-void BpParticleContact::ResolveInterpenetration(f32 duration)
+void BpParticleContact::ResolveInterpenetration(f32 dt)
 {
-	throw std::logic_error("The method or operation is not implemented.");
+	//Skip if no penetration
+	if (penetrationDepth <= 0)
+		return;
+
+	f32 totalInverseMass = particle[0]->GetState().inverseMass;
+	if (particle[1] != nullptr) totalInverseMass += particle[1]->GetState().inverseMass;
+	if (totalInverseMass <= 0)
+		return;
+
+	BpVec3 movePerIMass = contactNormal * (penetrationDepth / totalInverseMass);
+
+	particleMovement[0] = movePerIMass * particle[0]->GetState().inverseMass;
+	if (particle[1] != nullptr)
+	{
+		particleMovement[1] = movePerIMass * -particle[1]->GetState().inverseMass;
+	}
+	else
+	{
+		particleMovement[1].Zero();
+	}
+
+	//Apply Resolution
+	particle[0]->SetPosition(particle[0]->GetPosition() + particleMovement[0]);
+	if (particle[1] != nullptr)
+	{
+		particle[1]->SetPosition(particle[1]->GetPosition() + particleMovement[1]);
+	}
+}
+
+BpParticleContactResolver::BpParticleContactResolver(unsigned iterations) 
+	: iterations(iterations)
+{}
+
+void BpParticleContactResolver::SetIterations(unsigned newIterations)
+{
+	iterations = newIterations;
+}
+
+void BpParticleContactResolver::ResolveContacts(BpParticleContact* contactArray, unsigned numContacts, f32 dt)
+{
+	unsigned i;
+
+	iterationsUsed = 0;
+	while (iterationsUsed < iterations)
+	{
+		//Find Contact with largest closing velocity
+		f32 max = BP_MAX_REAL;
+		unsigned maxIndex = numContacts;
+		for (i = 0; i < numContacts; i++)
+		{
+			f32 sepVel = contactArray[i].CalculateSeparatingVelocity();
+			if (sepVel < max && (sepVel < 0 || contactArray[i].penetrationDepth > 0))
+			{
+				max = sepVel;
+				maxIndex = i;
+			}
+		}
+
+		if(maxIndex == numContacts) break;
+
+		contactArray[maxIndex].Resolve(dt);
+
+		BpVec3* move = contactArray[maxIndex].particleMovement;
+		for (i = 0; i < numContacts; i++)
+		{
+			if (contactArray[i].particle[0] == contactArray[maxIndex].particle[0])
+			{
+				contactArray[i].penetrationDepth -= move[0].Dot(contactArray[i].contactNormal);
+			}
+			else if (contactArray[i].particle[0] == contactArray[maxIndex].particle[1])
+			{
+				contactArray[i].penetrationDepth -= move[1].Dot(contactArray[i].contactNormal);
+			}
+
+			if (contactArray[i].particle[1] != nullptr)
+			{
+				if (contactArray[i].particle[1] == contactArray[maxIndex].particle[1])
+				{
+					contactArray[i].penetrationDepth += move[0].Dot(contactArray[i].contactNormal);
+				}
+				else if (contactArray[1].particle[1] == contactArray[maxIndex].particle[1])
+				{
+					contactArray[i].penetrationDepth += move[1].Dot(contactArray[i].contactNormal);
+				}
+			}
+		}
+
+		iterationsUsed++;
+	}
 }
