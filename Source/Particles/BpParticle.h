@@ -21,24 +21,15 @@ namespace bPhysics
 		{
 			//Primary State
 			BpVec3 position;
-			BpVec3 momentum;
+			BpVec3 velocity;
+			BpVec3 acceleration;
 
-			//Secondary State
-			BpVec3 velocity; //Calculated from momentum
-
-			BpMat4x4 bodyToWorld;
-
-			float size;                    
-			float mass;
-			float inverseMass;
+			f32 size;                    
+			f32 mass;
+			f32 inverseMass;
 
 			void Recalculate()
 			{
-				velocity = momentum * inverseMass;
-
-				BpMat4x4 translation;
-				translation.BuildTranslation(position);
-				bodyToWorld = translation;
 			}
 		};
 
@@ -48,35 +39,27 @@ namespace bPhysics
 		void SetMass(f32 mass);
 		void SetInverseMass(f32 inverseMass);
 
-		void Simulate(const std::vector<BpPlane>& planes, f32 timestep);
+		void Simulate(f32 timestep);
 
 		void AddForce(const BpVec3& force);
 
 		BpVec3 GetPosition();
-		void SetPosition(float x, float y, float z);
+		void SetPosition(f32 x, f32 y, f32 z);
 		
 		BpVec3 GetVelocity();
-		void SetVelocity(float x, float y, float z);
+		void SetVelocity(f32 x, f32 y, f32 z);
 
-		BpVec3 GetGravity();
-		void SetGravity(float x, float y, float z);
+		BpVec3 GetAcceleration();
+		void SetAcceleration(f32 x, f32 y, f32 z);
 
-		void SetDamping(float damping);
+		void SetDamping(f32 damping);
 
 		void ClearAccumulator();
-
-		void CollisionForPoint(const IntegrationState & state, BpVec3 & force, const BpVec3 & point, const BpPlane & plane);
 
 		const IntegrationState& GetState() const;
 
 	private:
-		void Integrate(const std::vector<BpPlane>& planes, IntegrationState& initialState, float dt);
-
-		IntegrationDerivative Evaluate(const std::vector<BpPlane>& planes, const IntegrationState& state, float dt);
-		IntegrationDerivative Evaluate(const std::vector<BpPlane>& planes, IntegrationState state, float dt, const IntegrationDerivative& derivative);
-
-		void Forces(const std::vector<BpPlane>& planes, const IntegrationState& state, BpVec3& force);
-		static void Collision(const std::vector<BpPlane>& planes, const IntegrationState & state, BpVec3 & force);
+		void Integrate(IntegrationState& initialState, f32 dt);
 
 	private:
 		IntegrationState m_currentState;

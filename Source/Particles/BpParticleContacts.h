@@ -32,7 +32,7 @@ namespace bPhysics
 
 	private:
 		void ResolveVelocity(f32 duration);
-		void ResolveIntepenetration(f32 duration);
+		void ResolveInterpenetration(f32 duration);
 	};
 
 	class BpParticleContactResolver
@@ -46,6 +46,7 @@ namespace bPhysics
 
 		void SetIterations(unsigned iterations);
 
+		//Resolve set of particle contacts for penetration and velocity
 		void ResolveContacts(BpParticleContact* contactArray, unsigned numContacts, f32 duration);
 	};
 
