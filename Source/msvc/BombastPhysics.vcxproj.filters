@@ -87,6 +87,12 @@
     <ClInclude Include="..\Particles\BpParticleContacts.h">
       <Filter>Particles</Filter>
     </ClInclude>
+    <ClInclude Include="..\Particles\BpParticleWorld.h">
+      <Filter>Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Particles\BpParticleForceGenerators.h">
+      <Filter>Particles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\BpPhysicsCore.cpp" />
@@ -122,6 +128,12 @@
       <Filter>Particles</Filter>
     </ClCompile>
     <ClCompile Include="..\Particles\BpParticleContacts.cpp">
+      <Filter>Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Particles\BpParticleForceGenerators.cpp">
+      <Filter>Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Particles\BpParticleWorld.cpp">
       <Filter>Particles</Filter>
     </ClCompile>
   </ItemGroup>
