@@ -10,7 +10,10 @@
 #include "Foundation\BpPreprocessor.h"
 #include "Foundation\BpSimpleTypes.h"
 
+//Particles
 #include "Particles\BpParticle.h"
+#include "Particles\BpParticleLinks.h"
+#include "Particles\BpParticleWorld.h"
 
 //Debugging
 #include "Debugging\Debugging.h"

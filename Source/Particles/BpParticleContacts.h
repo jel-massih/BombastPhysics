@@ -50,7 +50,7 @@ namespace bPhysics
 		void ResolveContacts(BpParticleContact* contactArray, unsigned numContacts, f32 dt);
 	};
 
-	class BpParicleContactGenerator
+	class BpParticleContactGenerator
 	{
 	public:
 		//Fill structure with generated contact.

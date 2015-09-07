@@ -44,7 +44,7 @@ namespace bPhysics
 		BpParticleForceRegistry& GetForceRegistry();
 	};
 
-	class GroundContacts : public BpParicleContactGenerator
+	class BpParticleGroundContacts : public BpParicleContactGenerator
 	{
 		BpParticleWorld::Particles* m_particles;
 

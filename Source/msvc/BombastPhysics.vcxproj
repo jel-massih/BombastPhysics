@@ -173,6 +173,7 @@
     <ClInclude Include="..\Particles\BpParticle.h" />
     <ClInclude Include="..\Particles\BpParticleContacts.h" />
     <ClInclude Include="..\Particles\BpParticleForceGenerators.h" />
+    <ClInclude Include="..\Particles\BpParticleLinks.h" />
     <ClInclude Include="..\Particles\BpParticleWorld.h" />
     <ClInclude Include="..\Scene\BpScene.h" />
     <ClInclude Include="stdafx.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="..\Particles\BpParticle.cpp" />
     <ClCompile Include="..\Particles\BpParticleContacts.cpp" />
     <ClCompile Include="..\Particles\BpParticleForceGenerators.cpp" />
+    <ClCompile Include="..\Particles\BpParticleLinks.cpp" />
     <ClCompile Include="..\Particles\BpParticleWorld.cpp" />
     <ClCompile Include="..\Scene\BpScene.cpp" />
     <ClCompile Include="stdafx.cpp">
