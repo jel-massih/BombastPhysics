@@ -53,6 +53,7 @@ namespace bPhysics
 
 		BpVec3 GetAcceleration();
 		void SetAcceleration(f32 x, f32 y, f32 z);
+		void SetAcceleration(BpVec3 acceleration);
 
 		void SetDamping(f32 damping);
 

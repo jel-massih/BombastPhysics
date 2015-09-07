@@ -69,6 +69,11 @@ void bPhysics::BpParticle::SetVelocity(BpVec3 velocity)
 	SetVelocity(velocity.x, velocity.y, velocity.z);
 }
 
+void bPhysics::BpParticle::SetAcceleration(BpVec3 acceleration)
+{
+	SetAcceleration(acceleration.x, acceleration.y, acceleration.z);
+}
+
 BpVec3 BpParticle::GetAcceleration()
 {
 	return m_currentState.acceleration;

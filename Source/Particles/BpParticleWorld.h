@@ -8,7 +8,7 @@ namespace bPhysics
 	{
 	public:
 		typedef std::vector<BpParticle*> Particles;
-		typedef std::vector<BpParicleContactGenerator*> ContactGenerators;
+		typedef std::vector<BpParticleContactGenerator*> ContactGenerators;
 
 	protected:
 		Particles m_particles;
@@ -44,7 +44,7 @@ namespace bPhysics
 		BpParticleForceRegistry& GetForceRegistry();
 	};
 
-	class BpParticleGroundContacts : public BpParicleContactGenerator
+	class BpParticleGroundContacts : public BpParticleContactGenerator
 	{
 		BpParticleWorld::Particles* m_particles;
 
