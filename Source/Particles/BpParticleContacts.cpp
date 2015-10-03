@@ -58,7 +58,7 @@ void BpParticleContact::ResolveVelocity(f32 dt)
 
 	f32 impules = deltaVelocity / totalInverseMass;
 
-	BpVec3 impulsePerIMass = contactNormal.Dot(impules);
+	BpVec3 impulsePerIMass = contactNormal * impules;
 
 	particle[0]->SetVelocity(particle[0]->GetVelocity() + impulsePerIMass * particle[0]->GetState().inverseMass);
 	if (particle[1] != nullptr)

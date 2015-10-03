@@ -9,6 +9,7 @@ void BpParticle::SetMass(f32 mass)
 {
 	assert(mass != 0);
 	m_currentState.inverseMass = (f32)1.0 / mass;
+	m_currentState.mass = mass;
 	m_currentState.Recalculate();
 }
 
@@ -106,10 +107,10 @@ void BpParticle::Integrate(IntegrationState& initialState, f32 dt)
 
 	BpVec3 resultingAcceleration = initialState.acceleration;
 	resultingAcceleration += m_accumulatedForce * initialState.inverseMass;
-
+	
 	initialState.velocity += resultingAcceleration * dt;
 
-	initialState.velocity += pow(m_damping, dt);
+	initialState.velocity *= pow(m_damping, dt);
 
 	ClearAccumulator();
 
