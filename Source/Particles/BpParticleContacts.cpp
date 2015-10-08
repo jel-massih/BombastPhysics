@@ -145,7 +145,7 @@ void BpParticleContactResolver::ResolveContacts(BpParticleContact* contactArray,
 
 			if (contactArray[i].particle[1] != nullptr)
 			{
-				if (contactArray[i].particle[1] == contactArray[maxIndex].particle[1])
+				if (contactArray[i].particle[1] == contactArray[maxIndex].particle[0])
 				{
 					contactArray[i].penetrationDepth += move[0].Dot(contactArray[i].contactNormal);
 				}
