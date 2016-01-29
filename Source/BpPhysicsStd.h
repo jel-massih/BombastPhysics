@@ -5,7 +5,7 @@
 #if defined(_DEBUG)
 #define BP_NEW new(_NORMAL_BLOCK,__FILE__, __LINE__)
 #else
-#define BE_NEW new
+#define BP_NEW new
 #endif
 
 #if !defined(BP_SAFE_DELETE)
