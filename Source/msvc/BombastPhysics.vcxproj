@@ -67,23 +67,23 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)..\Game\Lib\$(PlatformName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)..\Lib\$(PlatformName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\temp\$(ProjectName)$(PlatformName)$(Configuration)\</IntDir>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetExt>.lib</TargetExt>
-    <OutDir>$(SolutionDir)..\Game\Lib\$(PlatformName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)..\Lib\$(PlatformName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\temp\$(ProjectName)$(PlatformName)$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)..\Game\Lib\$(PlatformName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)..\Lib\$(PlatformName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\temp\$(ProjectName)$(PlatformName)$(Configuration)\</IntDir>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetExt>.lib</TargetExt>
-    <OutDir>$(SolutionDir)..\Game\Lib\$(PlatformName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)..\Lib\$(PlatformName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\temp\$(ProjectName)$(PlatformName)$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
